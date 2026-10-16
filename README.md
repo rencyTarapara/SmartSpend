@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 
 
 \# SmartSpend
@@ -70,3 +71,7 @@ Develop the microservices, integrate the frontend, containerize the application,
 
 
 
+=======
+# SmartSpend
+Microservices that track your expanses, budget, analytics and alerts with dashboard.
+>>>>>>> d18ae4cb46a62ce973f4ba424312a419fdf9228b
