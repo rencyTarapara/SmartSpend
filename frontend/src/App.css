@@ -123,3 +123,67 @@ footer span { padding: 0 5px; color: #7968e7; }
   .form-row { grid-template-columns: 1fr; gap: 0; }
   th, td { padding: 12px 9px; }
 }
+
+.month-picker, .inline-picker { display: grid; gap: 6px; color: #667087; font-size: 11px; font-weight: 700; }
+.month-picker input, .inline-picker input { margin: 0; min-width: 150px; }
+.inline-picker { align-items: end; }
+.inline-picker input { min-width: 110px; }
+.notice { padding: 12px 15px; border-radius: 9px; margin: 0 0 18px; font-size: 12px; }
+.notice p { margin: 4px 0; }
+.warning-notice { background: #fff7e8; color: #875c08; border: 1px solid #f3dfb2; }
+.error-notice, .error-state { background: #fff2f2; color: #a93342; border: 1px solid #f1d3d7; }
+.error-notice { display: flex; justify-content: space-between; align-items: center; gap: 12px; }
+.notice button, .error-state button { border: 0; background: transparent; color: inherit; font: inherit; font-weight: 750; text-decoration: underline; cursor: pointer; }
+.error-state { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 12px; border-radius: 8px; font-size: 12px; }
+.summary-list { display: grid; gap: 14px; }
+.summary-list > div, .year-stats > div { display: flex; justify-content: space-between; gap: 12px; align-items: center; color: #687288; font-size: 12px; }
+.summary-list strong, .year-stats strong { color: #303a52; text-align: right; }
+.expense-form { display: grid; grid-template-columns: minmax(150px,2fr) repeat(3,minmax(120px,1fr)) auto; align-items: end; gap: 12px; margin-bottom: 20px; }
+.expense-form label { display: block; font-size: 11px; font-weight: 700; color: #48536a; margin-bottom: 8px; }
+.expense-form input, .expense-form select { margin-bottom: 0; }
+.expense-form .primary-button { width: auto; padding: 0 18px; margin-bottom: 0; }
+.analytics-panel, .savings-panel { margin-top: 20px; scroll-margin-top: 20px; }
+.chart-container { width: 100%; height: 330px; min-width: 0; }
+.category-chart { height: 290px; }
+.chart-tooltip { max-width: 300px; background: white; border: 1px solid #e2e5ee; border-radius: 9px; padding: 12px; box-shadow: 0 5px 18px #20294b18; color: #303a52; font-size: 11px; }
+.chart-tooltip p { margin: 6px 0; color: #687288; }
+.chart-subtitle { margin: 25px 0 10px; color: #465169; font-size: 13px; }
+.year-stats { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 15px; margin-bottom: 20px; padding: 15px; background: #f8f8fc; border-radius: 10px; }
+.year-stats > div { flex-direction: column; align-items: flex-start; }
+.year-stats strong { text-align: left; font-size: 16px; }
+.empty-state { display: grid; min-height: 125px; place-items: center; text-align: center; color: #8992a4; font-size: 12px; }
+.savings-columns { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 24px; }
+.savings-columns h3, .spaced-heading { color: #465169; font-size: 13px; margin: 0 0 14px; }
+.savings-columns form { margin-bottom: 18px; }
+.savings-columns .primary-button { margin-bottom: 0; }
+.spaced-heading { margin-top: 25px; }
+.button-row { display: flex; gap: 9px; }
+.button-row button { width: auto; flex: 1; }
+.secondary-button { min-height: 43px; padding: 0 14px; border: 1px solid #dce0e9; border-radius: 8px; background: white; color: #4d5870; font: inherit; font-size: 12px; font-weight: 700; cursor: pointer; }
+.secondary-button:hover { background: #f6f6fa; }
+.primary-button:disabled, .secondary-button:disabled, .delete-button:disabled { opacity: .6; cursor: not-allowed; }
+.goal-amount-label { display: block; max-width: 320px; font-size: 11px; font-weight: 700; color: #48536a; margin-bottom: 8px; }
+.goal-amount-input { max-width: 320px; display: block; }
+.goal-list { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 13px; }
+.goal-card { padding: 15px; border: 1px solid #e9ebf2; border-radius: 10px; }
+.goal-card .progress-track { margin: 12px 0 8px; }
+.goal-card .muted { margin: 0 0 12px; font-size: 11px; }
+.goal-title { display: flex; justify-content: space-between; gap: 12px; color: #303a52; font-size: 12px; }
+.goal-title span { text-align: right; color: #687288; }
+
+@media (max-width: 1000px) {
+  .expense-form { grid-template-columns: repeat(2,minmax(0,1fr)); }
+  .expense-form .primary-button { width: 100%; }
+}
+@media (max-width: 700px) {
+  .sidebar nav { grid-template-columns: repeat(3,minmax(0,1fr)); }
+  .nav-link { min-height: 42px; display: grid; place-items: center; }
+  .year-stats, .savings-columns, .goal-list { grid-template-columns: 1fr; }
+  .chart-container { height: 260px; }
+  .category-chart { height: 250px; }
+  .expense-form { grid-template-columns: 1fr; }
+  .expense-form .primary-button { width: 100%; }
+  .panel-heading { align-items: flex-start; }
+  .inline-picker { min-width: 95px; }
+  .inline-picker input { min-width: 95px; }
+}
