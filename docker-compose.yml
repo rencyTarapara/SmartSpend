@@ -1,10 +1,6 @@
-version: "3.9"
-
 services:
   expense-service:
-    build:
-      context: ./services/expense-service
-      dockerfile: Dockerfile
+    build: ./services/expense-service
     container_name: smartspend-expense-service
     ports:
       - "8000:8000"
@@ -21,9 +17,7 @@ services:
       start_period: 15s
 
   budget-service:
-    build:
-      context: ./services/budget-service
-      dockerfile: Dockerfile
+    build: ./services/budget-service
     container_name: smartspend-budget-service
     ports:
       - "8001:8001"
@@ -40,9 +34,7 @@ services:
       start_period: 15s
 
   analytics-service:
-    build:
-      context: ./services/analytics-service
-      dockerfile: Dockerfile
+    build: ./services/analytics-service
     container_name: smartspend-analytics-service
     ports:
       - "8002:8002"
@@ -60,9 +52,7 @@ services:
       start_period: 20s
 
   alert-service:
-    build:
-      context: ./services/alert-service
-      dockerfile: Dockerfile
+    build: ./services/alert-service
     container_name: smartspend-alert-service
     ports:
       - "8003:8003"
@@ -83,9 +73,7 @@ services:
       start_period: 20s
 
   savings-service:
-    build:
-      context: ./services/savings-service
-      dockerfile: Dockerfile
+    build: ./services/savings-service
     container_name: smartspend-savings-service
     ports:
       - "8004:8004"
@@ -111,15 +99,15 @@ services:
   frontend:
     build:
       context: ./frontend
+      args:
+        VITE_API_BASE_URL: http://localhost:8000
+        VITE_BUDGET_API_URL: http://localhost:8001
+        VITE_ANALYTICS_API_URL: http://localhost:8002
+        VITE_ALERT_API_URL: http://localhost:8003
+        VITE_SAVINGS_API_URL: http://localhost:8004
     container_name: smartspend-frontend
     ports:
-      - "5173:5173"
-    environment:
-      VITE_API_BASE_URL: http://localhost:8000
-      VITE_BUDGET_API_URL: http://localhost:8001
-      VITE_ANALYTICS_API_URL: http://localhost:8002
-      VITE_ALERT_API_URL: http://localhost:8003
-      VITE_SAVINGS_API_URL: http://localhost:8004
+      - "5173:80"
     depends_on:
       expense-service:
         condition: service_healthy
@@ -131,3 +119,9 @@ services:
         condition: service_healthy
       savings-service:
         condition: service_healthy
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
