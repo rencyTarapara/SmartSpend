@@ -1,0 +1,65 @@
+﻿apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: savings-service
+  namespace: smartspend
+  labels:
+    app: savings-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: savings-service
+  template:
+    metadata:
+      labels:
+        app: savings-service
+    spec:
+      containers:
+        - name: savings-service
+          image: smartspend-savings-service:latest
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8004
+          env:
+            - name: SMARTSPEND_SAVINGS_DB
+              value: /data/savings.db
+            - name: EXPENSE_SERVICE_URL
+              value: http://expense-service.smartspend.svc.cluster.local:8000
+            - name: BUDGET_SERVICE_URL
+              value: http://budget-service.smartspend.svc.cluster.local:8001
+            - name: CORS_ALLOWED_ORIGINS
+              value: "http://localhost:5173,http://127.0.0.1:5173"
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 8004
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 8004
+            initialDelaySeconds: 15
+            periodSeconds: 20
+          volumeMounts:
+            - name: savings-data
+              mountPath: /data
+      volumes:
+        - name: savings-data
+          persistentVolumeClaim:
+            claimName: savings-pvc
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: savings-service
+  namespace: smartspend
+spec:
+  selector:
+    app: savings-service
+  ports:
+    - protocol: TCP
+      port: 8004
+      targetPort: 8004
+  type: ClusterIP

@@ -1,0 +1,41 @@
+﻿apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: expense-pvc
+  namespace: smartspend
+spec:
+  storageClassName: ""          # no class, match manual PV
+  volumeName: expense-pv        # bind to the correct PV
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: budget-pvc
+  namespace: smartspend
+spec:
+  storageClassName: ""
+  volumeName: budget-pv
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: savings-pvc
+  namespace: smartspend
+spec:
+  storageClassName: ""
+  volumeName: savings-pv
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi

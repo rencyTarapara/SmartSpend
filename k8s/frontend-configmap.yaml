@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: frontend-config
+  namespace: smartspend
+data:
+  VITE_API_BASE_URL: http://expense-service.smartspend.svc.cluster.local:8000
+  VITE_BUDGET_API_URL: http://budget-service.smartspend.svc.cluster.local:8001
+  VITE_ANALYTICS_API_URL: http://analytics-service.smartspend.svc.cluster.local:8002
+  VITE_ALERT_API_URL: http://alert-service.smartspend.svc.cluster.local:8003
+  VITE_SAVINGS_API_URL: http://savings-service.smartspend.svc.cluster.local:8004

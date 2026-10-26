@@ -1,0 +1,61 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: expense-service
+  namespace: smartspend
+  labels:
+    app: expense-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: expense-service
+  template:
+    metadata:
+      labels:
+        app: expense-service
+    spec:
+      containers:
+        - name: expense-service
+          image: smartspend-expense-service:latest
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8000
+          env:
+            - name: SMARTSPEND_TEST_DB
+              value: /data/expenses.db
+            - name: CORS_ALLOWED_ORIGINS
+              value: "http://localhost:5173,http://127.0.0.1:5173"
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 8000
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 8000
+            initialDelaySeconds: 15
+            periodSeconds: 20
+          volumeMounts:
+            - name: expense-data
+              mountPath: /data
+      volumes:
+        - name: expense-data
+          persistentVolumeClaim:
+            claimName: expense-pvc
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: expense-service
+  namespace: smartspend
+spec:
+  selector:
+    app: expense-service
+  ports:
+    - protocol: TCP
+      port: 8000
+      targetPort: 8000
+  type: ClusterIP

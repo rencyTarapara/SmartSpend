@@ -1,0 +1,11 @@
+resources:
+  - namespace.yaml
+  - pv.yaml
+  - pvc.yaml
+  - frontend-configmap.yaml
+  - expense-deployment.yaml
+  - budget-deployment.yaml
+  - analytics-deployment.yaml
+  - alert-deployment.yaml
+  - savings-deployment.yaml
+  - frontend-deployment.yaml

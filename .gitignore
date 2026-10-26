@@ -1,9 +1,11 @@
 .venv/
+venv/
 __pycache__/
 *.py[cod]
 .pytest_cache/
 .coverage
 htmlcov/
+kubeconfig
 
 .env
 .env.*
@@ -15,3 +17,4 @@ htmlcov/
 
 .DS_Store
 Thumbs.db
+
