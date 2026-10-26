@@ -1,0 +1,6 @@
+line-length = 120
+extend-exclude = ["frontend", "node_modules"]
+
+[lint]
+select = ["E", "F"]
+ignore = ["E501"]

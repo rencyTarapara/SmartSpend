@@ -28,7 +28,8 @@ def seed_expenses():
         ('Laptop bag', 4200, 'Shopping', '2026-10-14'),
     ]
     conn.executemany('INSERT INTO expenses (description, amount, category, date) VALUES (?, ?, ?, ?)', rows)
-    conn.commit(); conn.close()
+    conn.commit()
+    conn.close()
 
 
 def seed_budget():
@@ -41,7 +42,8 @@ def seed_budget():
     conn.execute('INSERT INTO monthly_budgets (month, amount, created_at, updated_at) VALUES (?, ?, datetime("now"), datetime("now"))', ('2026-10', 30000))
     conn.execute('INSERT INTO budgets (category, monthly_limit, month) VALUES (?, ?, ?)', ('Food', 9000, '2026-10'))
     conn.execute('INSERT INTO budgets (category, monthly_limit, month) VALUES (?, ?, ?)', ('Bills', 11000, '2026-10'))
-    conn.commit(); conn.close()
+    conn.commit() 
+    conn.close()
 
 
 def seed_savings():
@@ -55,7 +57,8 @@ def seed_savings():
     conn.execute('DELETE FROM savings_allocations')
     conn.execute('INSERT INTO savings_ledger (type, amount, note, idempotency_key, created_at) VALUES (?, ?, ?, ?, datetime("now"))', ('deposit', 10000, 'Initial balance', 'seed-savings-deposit'))
     conn.execute('INSERT INTO savings_goals (name, target_amount, current_amount, target_date, created_at, updated_at) VALUES (?, ?, ?, ?, datetime("now"), datetime("now"))', ('Laptop', 80000, 5000, '2026-12-30'))
-    conn.commit(); conn.close()
+    conn.commit()
+    conn.close()
 
 
 if __name__ == '__main__':

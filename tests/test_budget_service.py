@@ -24,7 +24,6 @@ spec = importlib.util.spec_from_file_location("budget_main", SERVICE_PATH)
 module = importlib.util.module_from_spec(spec)
 
 # Point to a temp DB before module executes
-import sqlite3
 _budget_tmp = tempfile.NamedTemporaryFile(suffix=".db", delete=False)
 _budget_tmp.close()
 

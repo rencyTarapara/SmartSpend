@@ -1,9 +1,9 @@
-from contextlib import asynccontextmanager
-from datetime import datetime, timezone
-from pathlib import Path
+import os
 import re
 import sqlite3
-import os
+from contextlib import asynccontextmanager
+from datetime import UTC, datetime
+from pathlib import Path
 
 from fastapi import FastAPI, HTTPException, Query
 from fastapi.middleware.cors import CORSMiddleware
@@ -215,7 +215,7 @@ def delete_budget(budget_id: int):
 
 @app.post("/monthly-budgets", status_code=201)
 def create_monthly_budget(payload: MonthlyBudgetCreate):
-    now = datetime.now(timezone.utc).isoformat()
+    now = datetime.now(UTC).isoformat()
     try:
         with get_connection() as connection:
             cursor = connection.execute(
@@ -260,7 +260,7 @@ def get_monthly_budget(month: str):
 def update_monthly_budget(month: str, payload: MonthlyBudgetUpdate):
     if not MONTH_RE.match(month):
         raise HTTPException(status_code=422, detail="Month must be YYYY-MM format")
-    now = datetime.now(timezone.utc).isoformat()
+    now = datetime.now(UTC).isoformat()
     with get_connection() as connection:
         cursor = connection.execute(
             "UPDATE monthly_budgets SET amount = ?, updated_at = ? WHERE month = ?",

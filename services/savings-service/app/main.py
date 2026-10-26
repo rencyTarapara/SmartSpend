@@ -1,8 +1,8 @@
-from contextlib import asynccontextmanager
-from datetime import date, datetime, timezone
 import os
 import sqlite3
 import uuid
+from contextlib import asynccontextmanager
+from datetime import UTC, date, datetime
 from pathlib import Path
 
 import httpx
@@ -302,7 +302,7 @@ def get_balance():
 @app.post("/savings/deposit", status_code=201)
 def deposit(payload: DepositRequest):
     key = payload.idempotency_key or str(uuid.uuid4())
-    now = datetime.now(timezone.utc).isoformat()
+    now = datetime.now(UTC).isoformat()
 
     with get_connection() as conn:
         conn.execute("BEGIN IMMEDIATE")
@@ -325,7 +325,7 @@ def deposit(payload: DepositRequest):
 @app.post("/savings/withdraw", status_code=201)
 def withdraw(payload: WithdrawalRequest):
     key = payload.idempotency_key or str(uuid.uuid4())
-    now = datetime.now(timezone.utc).isoformat()
+    now = datetime.now(UTC).isoformat()
 
     with get_connection() as conn:
         conn.execute("BEGIN IMMEDIATE")
@@ -413,7 +413,7 @@ def allocate_monthly_funds(payload: AllocationRequest):
             )
 
     budget_amount, spent = _budget_and_spending(payload.month)
-    now = datetime.now(timezone.utc).isoformat()
+    now = datetime.now(UTC).isoformat()
     with get_connection() as conn:
         conn.execute("BEGIN IMMEDIATE")
         existing = conn.execute(
@@ -518,7 +518,7 @@ def list_transactions(
 
 @app.post("/savings/goals", status_code=201)
 def create_goal(payload: GoalCreate):
-    now = datetime.now(timezone.utc).isoformat()
+    now = datetime.now(UTC).isoformat()
     with get_connection() as conn:
         cursor = conn.execute(
             "INSERT INTO savings_goals (name, target_amount, target_date, created_at, updated_at) VALUES (?,?,?,?,?)",
@@ -558,7 +558,7 @@ def get_goal(goal_id: int):
 
 @app.put("/savings/goals/{goal_id}")
 def update_goal(goal_id: int, payload: GoalUpdate):
-    now = datetime.now(timezone.utc).isoformat()
+    now = datetime.now(UTC).isoformat()
     with get_connection() as conn:
         existing = conn.execute(
             "SELECT * FROM savings_goals WHERE id = ?", (goal_id,)
@@ -587,7 +587,7 @@ def update_goal(goal_id: int, payload: GoalUpdate):
 @app.post("/savings/goals/{goal_id}/contribute", status_code=201)
 def contribute_to_goal(goal_id: int, payload: ContributionRequest):
     key = payload.idempotency_key or str(uuid.uuid4())
-    now = datetime.now(timezone.utc).isoformat()
+    now = datetime.now(UTC).isoformat()
 
     with get_connection() as conn:
         conn.execute("BEGIN IMMEDIATE")
@@ -641,7 +641,7 @@ def contribute_to_goal(goal_id: int, payload: ContributionRequest):
 @app.post("/savings/goals/{goal_id}/withdraw", status_code=201)
 def withdraw_from_goal(goal_id: int, payload: ContributionRequest):
     key = payload.idempotency_key or str(uuid.uuid4())
-    now = datetime.now(timezone.utc).isoformat()
+    now = datetime.now(UTC).isoformat()
 
     with get_connection() as conn:
         conn.execute("BEGIN IMMEDIATE")

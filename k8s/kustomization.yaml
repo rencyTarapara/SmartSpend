@@ -9,3 +9,23 @@ resources:
   - alert-deployment.yaml
   - savings-deployment.yaml
   - frontend-deployment.yaml
+
+images:
+  - name: smartspend-expense-service
+    newName: ghcr.io/rencytarapara/smartspend-expense-service
+    newTag: latest
+  - name: smartspend-budget-service
+    newName: ghcr.io/rencytarapara/smartspend-budget-service
+    newTag: latest
+  - name: smartspend-analytics-service
+    newName: ghcr.io/rencytarapara/smartspend-analytics-service
+    newTag: latest
+  - name: smartspend-alert-service
+    newName: ghcr.io/rencytarapara/smartspend-alert-service
+    newTag: latest
+  - name: smartspend-savings-service
+    newName: ghcr.io/rencytarapara/smartspend-savings-service
+    newTag: latest
+  - name: smartspend-frontend
+    newName: ghcr.io/rencytarapara/smartspend-frontend
+    newTag: latest
