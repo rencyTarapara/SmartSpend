@@ -13,21 +13,21 @@ resources:
 images:
 - name: smartspend-alert-service
   newName: ghcr.io/rencytarapara/smartspend-alert-service
-  newTag: 4286127f35e8c16c55cc647655cfc9ae97a85752
+  newTag: f198e0d6a31870386fe43b6f339b61360f5da08a
 - name: smartspend-analytics-service
   newName: ghcr.io/rencytarapara/smartspend-analytics-service
-  newTag: 4286127f35e8c16c55cc647655cfc9ae97a85752
+  newTag: f198e0d6a31870386fe43b6f339b61360f5da08a
 - name: smartspend-budget-service
   newName: ghcr.io/rencytarapara/smartspend-budget-service
-  newTag: 4286127f35e8c16c55cc647655cfc9ae97a85752
+  newTag: f198e0d6a31870386fe43b6f339b61360f5da08a
 - name: smartspend-expense-service
   newName: ghcr.io/rencytarapara/smartspend-expense-service
-  newTag: 4286127f35e8c16c55cc647655cfc9ae97a85752
+  newTag: f198e0d6a31870386fe43b6f339b61360f5da08a
 - name: smartspend-frontend
   newName: ghcr.io/rencytarapara/smartspend-frontend
-  newTag: 4286127f35e8c16c55cc647655cfc9ae97a85752
+  newTag: f198e0d6a31870386fe43b6f339b61360f5da08a
 - name: smartspend-savings-service
   newName: ghcr.io/rencytarapara/smartspend-savings-service
-  newTag: 4286127f35e8c16c55cc647655cfc9ae97a85752
+  newTag: f198e0d6a31870386fe43b6f339b61360f5da08a
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
