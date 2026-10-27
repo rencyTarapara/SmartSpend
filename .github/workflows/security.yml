@@ -1,0 +1,115 @@
+name: Security
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  schedule:
+    - cron: "0 3 * * 1"   # weekly, because new CVEs appear over time
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  secrets:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  dockerfile-lint:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        path:
+          - services/expense-service
+          - services/budget-service
+          - services/analytics-service
+          - services/alert-service
+          - services/savings-service
+          - frontend
+    steps:
+      - uses: actions/checkout@v4
+      - name: Hadolint
+        run: docker run --rm -i hadolint/hadolint:v2.12.0 hadolint --failure-threshold error - < ${{ matrix.path }}/Dockerfile
+
+  dependencies:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: pip-audit
+        run: |
+          pip install pip-audit
+          pip-audit -r requirements.txt
+        continue-on-error: true   # report-only at first; remove to enforce
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: npm audit
+        working-directory: frontend
+        run: |
+          npm ci
+          npm audit --audit-level=high
+        continue-on-error: true   # report-only at first; remove to enforce
+
+  codeql:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      security-events: write
+    strategy:
+      fail-fast: false
+      matrix:
+        language: [python, javascript-typescript]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: github/codeql-action/init@v4
+        with:
+          languages: ${{ matrix.language }}
+      - uses: github/codeql-action/analyze@v4
+        with:
+          category: "/language:${{ matrix.language }}"
+
+  k8s-manifest-scan:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Trivy config scan
+        run: |
+          docker run --rm -v "$PWD:/src" aquasec/trivy:0.69.3 \
+            config --severity HIGH,CRITICAL --exit-code 0 /src/k8s
+        # change --exit-code 0 to 1 once you've fixed the findings
+
+  image-scan:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - { name: expense-service,   context: services/expense-service }
+          - { name: budget-service,    context: services/budget-service }
+          - { name: analytics-service, context: services/analytics-service }
+          - { name: alert-service,     context: services/alert-service }
+          - { name: savings-service,   context: services/savings-service }
+          - { name: frontend,          context: frontend }
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build image
+        run: docker build -t scan/${{ matrix.name }}:ci ${{ matrix.context }}
+      - name: Trivy image scan
+        run: |
+          docker run --rm -v /var/run/docker.sock:/var/run/docker.sock \
+            aquasec/trivy:0.69.3 image \
+            --severity HIGH,CRITICAL --ignore-unfixed --exit-code 0 \
+            scan/${{ matrix.name }}:ci
+        # change --exit-code 0 to 1 once the base images are clean
